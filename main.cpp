@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <string>
 
 using namespace std;
 
@@ -58,6 +59,7 @@ void playGame(){
 	int moves = 0;
 	bool gamePlay = true;
 	bool replay = true;
+	string retry;
 	int loc;
 	char buffer[10]; // buffer for storing board location
 	if (replay){
@@ -74,7 +76,7 @@ void playGame(){
 		cin >> loc;
 
 		try{
-			if (boardList[loc] == itoa(loc, buffer, 10)){
+			if (boardList[loc] == static_cast<char>(loc)){
 				if (turn == 0){
 					// player 1 turn
 					if (addToBoard(boardList, p1_sign, loc)){
@@ -88,6 +90,25 @@ void playGame(){
 			}
 		}catch (...){
 			cout << "That space is already occupied" << endl;
+		}
+
+		if (allHorizontal(boardList) || allVertical(boardList) || allDiagonal(boardList)){
+			if (turn == 0){
+				// player 1
+				cout << "Player 2 has won!" << endl;
+				drawBoard(boardList);
+			}else{
+				// player 2
+				cout << "Player 2 has won!" << endl;
+				drawBoard(boardList);
+			}
+			cout << "Play again? (yes/no):";
+			cin >> retry;
+			if (retry == 'yes'){
+				continue;
+			}else{
+				gamePlay = false;
+			}
 		}
 	}
 }
@@ -118,7 +139,8 @@ void startGame(){
 
 
 int main(){
-	drawBoard(boardList);
+	// drawBoard(boardList);
+	startGame();
 
 	return 0;
 }
