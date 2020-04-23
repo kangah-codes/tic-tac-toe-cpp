@@ -6,10 +6,10 @@ using namespace std;
 
 char boardList[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 char signs[] = {'X', '0'};
-char p1[1];
-char p2[1];
-char p1_sign[1];
-char p2_sign[1];
+char p1;
+char p2;
+char p1_sign;
+char p2_sign;
 int start;
 int turn;
 
@@ -25,19 +25,18 @@ void drawBoard(char arr[]){
 	cout << "   |   |      " << endl; 
 }
 
-int addToBoard(char arr[], char item, int position){
-	if (arr[position] != 'X' || arr[position] != '0'){
+bool addToBoard(char arr[], char item, int position){
+	if (arr[position] != 'X' && arr[position] != '0'){
 		arr[position] = item;
-		return 1;
+		return true;
 	}else{
-		return 0;
+		return false;
 	}
 }
 
 void checkForWin(char arr[]){
 	char temp[] = {};
-
-	for (int i=0;i<sizeof(arr)/sizeof(arr[0]);++i){
+	for (int i=0;i<sizeof(arr);++i){
 		temp[i] = arr[i];
 	}
 }
@@ -52,6 +51,45 @@ bool allVertical(char arr[]){
 
 bool allDiagonal(char arr[]){
 	return (arr[0] == arr[4] == arr[8] || arr[2] == arr[4] == arr[6]);
+}
+
+
+void playGame(){
+	int moves = 0;
+	bool gamePlay = true;
+	bool replay = true;
+	int loc;
+	char buffer[10]; // buffer for storing board location
+	if (replay){
+		char boardList[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+	}
+
+	cout << "Player 1's sign is " << p1_sign << endl;
+	cout << "Player 2's sign is " << p2_sign << endl;
+
+	while (gamePlay){
+		cout << "It is player " << turn << "'s turn to play" << endl;
+		drawBoard(boardList);
+		cout << "Which location would player " << turn << " put their sign?" << endl;
+		cin >> loc;
+
+		try{
+			if (boardList[loc] == itoa(loc, buffer, 10)){
+				if (turn == 0){
+					// player 1 turn
+					if (addToBoard(boardList, p1_sign, loc)){
+						turn = 1;
+					}
+				}else{
+					if (addToBoard(boardList, p2_sign, loc)){
+						turn = 0;
+					}
+				}
+			}
+		}catch (...){
+			cout << "That space is already occupied" << endl;
+		}
+	}
 }
 
 void startGame(){
@@ -74,6 +112,8 @@ void startGame(){
 	}
 
 	turn = rand()%2;
+
+	playGame();
 }
 
 
